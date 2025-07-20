@@ -1,40 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>{{ project_name }} | Welcome</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hydrogen Golf</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
-    <header>
-        <h1>{{ project_name }}</h1>
-    </header>
-    <main>
-        <p id="greeting">Loading …</p>
-        <p>This platform promotes hydrogen-powered technology in the golf industry.</p>
-    </main>
-    <section>
-    <textarea id="prompt" placeholder="Ask me anything about hydrogen golf tech..."></textarea>
-    <button onclick="askAI()">Ask</button>
-    <p id="response"></p>
+  <header>
+    <h1>Hydrogen Golf</h1>
+    <p class="tagline">Powering the Future of Golf with Green Technology</p>
+  </header>
+
+  <main>
+    <section class="prompt-form">
+      <form id="prompt-form">
+        <label for="prompt">Ask Hydrogen Golf a Question:</label>
+        <textarea name="prompt" id="prompt" rows="5" placeholder="e.g., How does hydrogen fuel benefit golf carts?"></textarea>
+        <button type="submit">Submit</button>
+      </form>
     </section>
 
-    <script>
-        function askAI() {
-            const prompt = document.getElementById("prompt").value;
-            fetch("/api/ask", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt })
-            })
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById("response").textContent = d.reply;
-                });
-        }
-    </script>
-</body>
+    <section class="response-box" id="response-container" style="display:none;">
+      <h2>Response:</h2>
+      <div id="response">Your answer will appear here...</div>
+    </section>
+  </main>
 
+  <footer>
+    <p>🚀 Powered by OpenQQuantify | 
+      <a href="https://calendly.com/openqquantifyexecutivemeeting/businessdevelopment" target="_blank">
+        Book a Consultation
+      </a>
+    </p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("prompt-form");
+    const responseBox = document.getElementById("response");
+    const responseContainer = document.getElementById("response-container");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const prompt = document.getElementById("prompt").value.trim();
+      responseBox.innerHTML = "Thinking...";
+      responseContainer.style.display = "block";
+
+      try {
+        const res = await fetch("/api/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await res.json();
+        console.log("Response from API:", data);
+
+        const lines = (data.reply || "No response received.").split(/\n+/).filter(Boolean);
+        if (lines.length > 1) {
+          responseBox.innerHTML = "<ul>" + lines.map(l => `<li>${l.replace(/^\d+\.\s*/, "")}</li>`).join("") + "</ul>";
+        } else {
+          responseBox.textContent = data.reply || "No response received.";
+        }
+
+      } catch (err) {
+        console.error("Error:", err);
+        responseBox.textContent = "Error retrieving response.";
+      }
+    });
+  </script>
+</body>
 </html>
