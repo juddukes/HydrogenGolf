@@ -56,12 +56,11 @@ Learn how Hydrogen Golf or similar AI products can support your goals.
 ## Screenshots
 
 **Prompt Form Interface**
-![Prompt Example](https://your-image-url.com/prompt.png)
+![Prompt Example](https://raw.githubusercontent.com/juddukes/HydrogenGolf/main/static/prompt-form-ai.png?raw=true)
 
 **AI Response Output**
-![Response Example](https://your-image-url.com/response.png)
+![Response Example](https://raw.githubusercontent.com/juddukes/HydrogenGolf/main/static/response-ai.png)
 
-*Replace image URLs with GitHub-hosted screenshots or upload directly to your repo.*
 
 ---
 
